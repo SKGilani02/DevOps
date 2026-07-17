@@ -1,0 +1,112 @@
+<!--
+  Feature for Issue #2: Add dark mode toggle to settings page
+  - Toggle switches between light/dark theme
+  - Preference is saved and re-applied on page load (persists across sessions)
+-->
+
+<div class="settings-row">
+  <label for="darkModeToggle" class="settings-label">Dark Mode</label>
+  <label class="switch">
+    <input type="checkbox" id="darkModeToggle">
+    <span class="slider"></span>
+  </label>
+</div>
+
+<style>
+  :root {
+    --bg-color: #ffffff;
+    --text-color: #1a1a1a;
+  }
+
+  body.dark-theme {
+    --bg-color: #1a1a1a;
+    --text-color: #f5f5f5;
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 300px;
+    padding: 12px 0;
+  }
+
+  .settings-label {
+    font-size: 15px;
+  }
+
+  /* Toggle switch styling */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    border-radius: 24px;
+    transition: 0.2s;
+  }
+
+  .slider::before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.2s;
+  }
+
+  input:checked + .slider {
+    background-color: #333;
+  }
+
+  input:checked + .slider::before {
+    transform: translateX(22px);
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('darkModeToggle');
+
+  // Apply saved theme on page load
+  function applySavedTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-theme');
+      toggle.checked = true;
+    }
+  }
+
+  // Handle toggle switch changes
+  toggle.addEventListener('change', () => {
+    if (toggle.checked) {
+      document.body.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+
+  applySavedTheme();
+</script>
